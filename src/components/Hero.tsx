@@ -5,15 +5,27 @@ import { Button } from '@/components/ui/button';
 
 const Hero = () => {
   const [animatedCount, setAnimatedCount] = useState(0);
+  const [animatedVisibility, setAnimatedVisibility] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const efficiencyTimer = setInterval(() => {
       setAnimatedCount(prev => {
-        if (prev < 99) return prev + 1;
+        if (prev < 95) return prev + 1;
         return prev;
       });
     }, 30);
-    return () => clearInterval(timer);
+    
+    const visibilityTimer = setInterval(() => {
+      setAnimatedVisibility(prev => {
+        if (prev < 100) return prev + 1;
+        return prev;
+      });
+    }, 25);
+    
+    return () => {
+      clearInterval(efficiencyTimer);
+      clearInterval(visibilityTimer);
+    };
   }, []);
 
   return (
@@ -46,12 +58,8 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
             <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
-              Start Enterprise Trial
+              Start Trial
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" className="border-2 border-gray-300 text-gray-700 hover:text-gray-900 hover:border-gray-400 px-8 py-4 text-lg font-semibold rounded-xl backdrop-blur-sm bg-white/50 hover:bg-white/70 transition-all duration-300">
-              <Play className="mr-2 h-5 w-5" />
-              Watch Demo
             </Button>
           </div>
 
@@ -60,15 +68,16 @@ const Hero = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl">
                 <div className="text-3xl font-bold text-gray-900">{animatedCount}%</div>
-                <div className="text-gray-600">Cost Reduction</div>
+                <div className="text-gray-600">Operational Efficiency</div>
               </div>
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl">
                 <div className="text-3xl font-bold text-gray-900">24/7</div>
-                <div className="text-gray-600">Enterprise Support</div>
+                <div className="text-gray-600">Real-Time Monitoring</div>
               </div>
+            
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-gray-200 hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl">
-                <div className="text-3xl font-bold text-gray-900">SOC2</div>
-                <div className="text-gray-600">Compliant</div>
+                <div className="text-3xl font-bold text-gray-900">{animatedVisibility}%</div>
+                <div className="text-gray-600">Complete Visibility</div>
               </div>
             </div>
           </div>
