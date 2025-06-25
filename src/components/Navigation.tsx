@@ -1,27 +1,37 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === '/';
   
-  const scrollToSection = (sectionId: string) => {
+  const navigateToSection = (sectionId: string) => {
     setIsOpen(false); // Close mobile menu if open
     
-    const element = document.getElementById(sectionId);
-    if (element) {
-      // Get the element's position relative to the viewport
-      const rect = element.getBoundingClientRect();
-      
-      // Calculate the absolute position by adding the current scroll position
-      const absoluteTop = rect.top + window.pageYOffset;
-      
-      // Scroll with a slight offset to account for fixed header
-      window.scrollTo({
-        top: absoluteTop - 80, // Offset by header height
-        behavior: 'smooth'
-      });
+    if (isHomePage) {
+      // If already on home page, scroll to the section
+      const element = document.getElementById(sectionId);
+      if (element) {
+        // Get the element's position relative to the viewport
+        const rect = element.getBoundingClientRect();
+        
+        // Calculate the absolute position by adding the current scroll position
+        const absoluteTop = rect.top + window.pageYOffset;
+        
+        // Scroll with a slight offset to account for fixed header
+        window.scrollTo({
+          top: absoluteTop - 80, // Offset by header height
+          behavior: 'smooth'
+        });
+      }
+    } else {
+      // If on another page, navigate to home page with section hash
+      navigate(`/#${sectionId}`);
     }
   };
 
@@ -31,17 +41,20 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <button 
+              onClick={() => navigate('/')} 
+              className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+            >
               LinqOps
-            </div>
+            </button>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <button onClick={() => scrollToSection('features')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Features</button>
-            <button onClick={() => scrollToSection('roles')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Roles</button>
-            <button onClick={() => scrollToSection('pricing')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Pricing</button>
-            <button onClick={() => scrollToSection('reviews')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Reviews</button>
+            <button onClick={() => navigateToSection('features')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Features</button>
+            <button onClick={() => navigateToSection('roles')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Roles</button>
+            <button onClick={() => navigateToSection('pricing')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Pricing</button>
+            <button onClick={() => navigateToSection('reviews')} className="text-gray-600 hover:text-gray-900 transition-colors duration-200">Reviews</button>
           </div>
 
           {/* CTA Buttons */}
@@ -71,10 +84,10 @@ const Navigation = () => {
         {isOpen && (
           <div className="md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-200">
             <div className="px-2 pt-2 pb-3 space-y-1">
-              <button onClick={() => scrollToSection('features')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Features</button>
-              <button onClick={() => scrollToSection('roles')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Roles</button>
-              <button onClick={() => scrollToSection('pricing')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Pricing</button>
-              <button onClick={() => scrollToSection('reviews')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Reviews</button>
+              <button onClick={() => navigateToSection('features')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Features</button>
+              <button onClick={() => navigateToSection('roles')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Roles</button>
+              <button onClick={() => navigateToSection('pricing')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Pricing</button>
+              <button onClick={() => navigateToSection('reviews')} className="block w-full text-left px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors">Reviews</button>
               <div className="pt-4 pb-2 space-y-2">
                 <Button variant="ghost" className="w-full text-gray-600 hover:text-gray-900">
                   Sign In
