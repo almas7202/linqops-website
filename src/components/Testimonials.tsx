@@ -1,5 +1,6 @@
-
-import { Star } from 'lucide-react';
+import { Star } from "lucide-react";
+import { motion, useInView, useAnimation, Variants } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const Testimonials = () => {
   const testimonials = [
@@ -7,42 +8,63 @@ const Testimonials = () => {
       name: "Sarah Chen",
       role: "Operations Director",
       company: "FastTrack Logistics",
-      content: "LinqOps transformed our delivery operations. We reduced costs by 35% and improved customer satisfaction dramatically. The AI-powered routing is incredible.",
+      content:
+        "LinqOps revolutionized our delivery management. From driver scheduling to dispatch coordination, it brought unmatched efficiency and visibility to our operations.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612c8c5?w=150&h=150&fit=crop&crop=face"
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=faces&fit=crop&w=150&h=150"
     },
     {
       name: "Michael Rodriguez",
       role: "CEO",
       company: "Urban Delivery Co",
-      content: "The enterprise features and security compliance gave us confidence to scale rapidly. Our fleet efficiency improved by 40% in just 3 months.",
+      content:
+        "As a scaling company, we needed stability. LinqOps gave us the tools and confidence to handle high-volume delivery flows while keeping our team aligned.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
     },
     {
       name: "Emily Johnson",
       role: "Fleet Manager",
       company: "Metro Express",
-      content: "The real-time analytics and predictive maintenance features have been game-changers. We've prevented multiple breakdowns and optimized our entire fleet.",
+      content:
+        "Our fleet uptime has improved drastically. With pre/post-trip inspections and real-time asset tracking, we’ve minimized downtime and streamlined reporting.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face"
     }
   ];
+  
 
   const companies = [
-    "FastTrack", "Urban Delivery", "Metro Express", "QuickShip", "Logistics Pro", "DeliveryFirst"
+    "FastTrack Logistics",
+    "Urban Delivery Co",
+    "Metro Express",
+    "QuickShip",
+    "Logistics Pro",
+    "DeliveryFirst"
   ];
+  
 
   return (
-    <section id="reviews" className="py-24 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <section
+      id="reviews"
+      className="py-24 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Trusted by Industry
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Leaders</span>
+            Empowering
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              {" "}
+              Leaders
+            </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Join hundreds of delivery companies that have transformed their operations with LinqOps
+            Trusted by logistics leaders to streamline dispatch, manage fleets,
+            and optimize workforce performance—LinqOps powers efficiency at
+            every stage.
           </p>
         </div>
 
@@ -67,7 +89,10 @@ const Testimonials = () => {
               {/* Rating */}
               <div className="flex space-x-1 mb-6">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  <Star
+                    key={i}
+                    className="h-5 w-5 text-yellow-400 fill-current"
+                  />
                 ))}
               </div>
 
@@ -84,9 +109,15 @@ const Testimonials = () => {
                   className="w-12 h-12 rounded-full"
                 />
                 <div>
-                  <div className="text-gray-900 font-semibold">{testimonial.name}</div>
-                  <div className="text-gray-600 text-sm">{testimonial.role}</div>
-                  <div className="text-gray-500 text-sm">{testimonial.company}</div>
+                  <div className="text-gray-900 font-semibold">
+                    {testimonial.name}
+                  </div>
+                  <div className="text-gray-600 text-sm">
+                    {testimonial.role}
+                  </div>
+                  <div className="text-gray-500 text-sm">
+                    {testimonial.company}
+                  </div>
                 </div>
               </div>
             </div>
@@ -94,26 +125,112 @@ const Testimonials = () => {
         </div>
 
         {/* Stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900 mb-2">500+</div>
-            <div className="text-gray-600">Enterprise Clients</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900 mb-2">99.9%</div>
-            <div className="text-gray-600">Uptime SLA</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900 mb-2">35%</div>
-            <div className="text-gray-600">Average Cost Reduction</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-gray-900 mb-2">24/7</div>
-            <div className="text-gray-600">Expert Support</div>
-          </div>
-        </div>
+        <StatsSection />
       </div>
     </section>
+  );
+};
+
+// Stats section with animations
+const StatsSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  
+  const containerVariants: Variants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+  
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+  };
+
+  return (
+    <motion.div 
+      ref={ref}
+      className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isInView ? "show" : "hidden"}
+    >
+      <StatItem 
+        value={500} 
+        suffix="+" 
+        label="Enterprise Clients" 
+        variants={itemVariants} 
+      />
+      <StatItem 
+        value={99.9} 
+        suffix="%" 
+        label="Uptime SLA" 
+        variants={itemVariants}
+        decimals={1} 
+      />
+      <StatItem 
+        value={35} 
+        suffix="%" 
+        label="Average Cost Reduction" 
+        variants={itemVariants} 
+      />
+      <StatItem 
+        value={24} 
+        suffix="/7" 
+        label="Expert Support" 
+        variants={itemVariants} 
+      />
+    </motion.div>
+  );
+};
+
+interface StatItemProps {
+  value: number;
+  suffix?: string;
+  label: string;
+  variants: Variants;
+  decimals?: number;
+}
+
+const StatItem = ({ value, suffix = "", label, variants, decimals = 0 }: StatItemProps) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const duration = 2000; // 2 seconds
+      const increment = value / (duration / 16); // 16ms per frame
+      
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= value) {
+          setCount(value);
+          clearInterval(timer);
+        } else {
+          setCount(start);
+        }
+      }, 16);
+      
+      return () => clearInterval(timer);
+    }
+  }, [isInView, value]);
+
+  return (
+    <motion.div 
+      ref={ref}
+      className="text-center" 
+      variants={variants}
+    >
+      <motion.div className="text-3xl font-bold text-gray-900 mb-2">
+        {count.toFixed(decimals)}{suffix}
+      </motion.div>
+      <div className="text-gray-600">{label}</div>
+    </motion.div>
   );
 };
 

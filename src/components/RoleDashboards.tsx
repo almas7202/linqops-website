@@ -1,108 +1,115 @@
-
-import { useState } from 'react';
-import { Monitor, Smartphone, PieChart, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Monitor, Smartphone, PieChart, Users } from "lucide-react";
+import { motion } from "framer-motion";
 
 const RoleDashboards = () => {
-  const [activeRole, setActiveRole] = useState('driver');
-  const [currentSlide, setCurrentSlide] = useState(0);
-  
-  const roleImages = {
-    driver: [
-      { src: '/images/driver-dashboard.png', alt: 'Driver Dashboard Interface' },
-      { src: '/images/driver-inspection.png', alt: 'Driver Inspection Interface' },
-      { src: '/images/driver-pre&post-inpsection-page.png', alt: 'Driver Pre/Post Inspection' },
-    ],
-    hr: [
-      { src: '/images/employee-page.png', alt: 'HR Employee Management' },
-      { src: '/images/applicants.png', alt: 'Applicant Tracking' },
-      { src: '/images/employee-details.png', alt: 'Employee Details' },
-      { src: '/images/termination.png', alt: 'Termination Records' },
-    ],
-    owner: [
-      { src: '/images/organization.png', alt: 'Organization Overview' },
-      { src: '/images/owner-inspection.png', alt: 'Inspection Reports' },
-      { src: '/images/vehicle-fleet-mnagment.png', alt: 'Fleet Management' },
-    ]
-  };
-  
-  const nextSlide = () => {
-    const images = roleImages[activeRole as keyof typeof roleImages];
-    setCurrentSlide((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-  
-  const prevSlide = () => {
-    const images = roleImages[activeRole as keyof typeof roleImages];
-    setCurrentSlide((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-  
-  // Reset slide index when changing roles
-  const handleRoleChange = (roleId: string) => {
-    setActiveRole(roleId);
-    setCurrentSlide(0);
-  };
+  const [activeRole, setActiveRole] = useState("driver");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const roles = [
     {
-      id: 'driver',
-      title: 'Driver Tools',
+      id: "driver",
+      title: "Driver Tools",
       icon: Smartphone,
-      description: 'Essential features tailored for drivers to manage daily delivery operations.',
+      description:
+        "Essential features tailored for drivers to manage daily delivery operations.",
+      images: [
+        "/images/driver-dashboard.png",
+        "/images/driver-inspection.png",
+        "/images/driver-pre&post-inpsection-page.png",
+      ],
       features: [
-        'Daily check-in and inspection (pre/post-trip)',
-        'Route-specific bag order visibility',
-        'Access to trip-related documents',
-        'View trip notes and write-ups',
-      ]
-    },
-    // {
-    //   id: 'manager',
-    //   title: 'Operations Manager',
-    //   icon: Monitor,
-    //   description: 'Full control over workforce, fleet, and dispatch with real-time visibility.',
-    //   features: [
-    //     'Driver scheduling and van assignment',
-    //     'Inspection status and repair monitoring',
-    //     'Incident and attendance tracking',
-    //     'Real-time dispatch notes and updates',
-    //   ]
-    // },
-    {
-      id: 'hr',
-      title: 'HR Panel',
-      icon: Users, // Replace with appropriate icon
-      description: 'Manage onboarding, termination, and role-based access control for all users.',
-      features: [
-        'Applicant onboarding and employee management',
-        'Payroll and attendance monitoring',
-        'Role-based user control and updates',
-        'Employee termination records',
-      ]
+        "Daily check-in and inspection (pre/post-trip)",
+        "Route-specific bag order visibility",
+        "Access to trip-related documents",
+        "View trip notes and write-ups",
+      ],
     },
     {
-      id: 'owner',
-      title: 'Owner Dashboard',
+      id: "hr",
+      title: "HR Panel",
+      icon: Users,
+      description:
+        "Manage onboarding, termination, and role-based access control for all users.",
+      images: [
+        "/images/employee-page.png",
+        "/images/applicants.png",
+        "/images/employee-details.png",
+        "/images/termination.png",
+      ],
+      features: [
+        "Applicant onboarding and employee management",
+        "Payroll and attendance monitoring",
+        "Role-based user control and updates",
+        "Employee termination records",
+      ],
+    },
+    {
+      id: "owner",
+      title: "Owner Dashboard",
       icon: PieChart,
-      description: 'High-level oversight of the entire organization, warehouses, and system access.',
+      description:
+        "High-level oversight of the entire organization, warehouses, and system access.",
+      images: [
+        "/images/organization.png",
+        "/images/owner-inspection.png",
+        "/images/vehicle-fleet-mnagment.png",
+      ],
       features: [
-        'Multi-warehouse visibility and reports',
-        'User management and permissions',
-        'Strategic business insights and analytics',
-        'Full access to all modules and actions',
-      ]
-    }
+        "Multi-warehouse visibility and reports",
+        "User management and permissions",
+        "Strategic business insights and analytics",
+        "Full access to all modules and actions",
+      ],
+    },
   ];
-  
+
+  const currentRole = roles.find((role) => role.id === activeRole);
+
+  // Auto-slide effect with longer interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (currentRole) {
+        setCurrentImageIndex((prev) => (prev + 1) % currentRole.images.length);
+      }
+    }, 5000); // 5 seconds interval
+
+    return () => clearInterval(interval);
+  }, [currentRole]);
+
+  // Reset image index when role changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [activeRole]);
+
+  const nextImage = () => {
+    if (currentRole) {
+      setCurrentImageIndex((prev) => (prev + 1) % currentRole.images.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (currentRole) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? currentRole.images.length - 1 : prev - 1
+      );
+    }
+  };
 
   return (
-    <section id="roles" className="py-24 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Tailored Experiences for
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Every Role</span>
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              {" "}
+              Every Role
+            </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            From drivers to executives, LinqOps provides role-specific interfaces optimized for each user's needs
+            From drivers to executives, LinqOps provides role-specific
+            interfaces optimized for each user's needs
           </p>
         </div>
 
@@ -111,11 +118,11 @@ const RoleDashboards = () => {
           {roles.map((role) => (
             <button
               key={role.id}
-              onClick={() => handleRoleChange(role.id)}
+              onClick={() => setActiveRole(role.id)}
               className={`flex items-center space-x-3 px-6 py-4 rounded-xl font-semibold transition-all duration-300 ${
                 activeRole === role.id
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                  : 'bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900 border border-gray-200'
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105"
+                  : "bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-900 border border-gray-200 hover:shadow-md"
               }`}
             >
               <role.icon className="h-5 w-5" />
@@ -125,82 +132,201 @@ const RoleDashboards = () => {
         </div>
 
         {/* Dashboard Preview */}
-        <div className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-3xl p-8 lg:p-12 shadow-xl">
+        <div className="bg-white border border-gray-200 rounded-3xl shadow-xl overflow-hidden">
           {roles.map((role) => (
             <div
               key={role.id}
-              className={`${activeRole === role.id ? 'block' : 'hidden'} space-y-8`}
+              className={`${activeRole === role.id ? "block" : "hidden"}`}
             >
-              <div className="text-center lg:text-left">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">{role.title}</h3>
-                <p className="text-xl text-gray-600 mb-8">{role.description}</p>
-              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-0">
+                {/* Image Section */}
+                <div className="relative bg-white lg:col-span-3">
+                  <div className="relative w-full h-full">
+                    <div className="relative overflow-hidden rounded-l-3xl bg-gray-50 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:translate-y-1 h-full">
+                      {role.images.map((image, index) => (
+                        <div
+                          key={index}
+                          className={`transition-opacity duration-1000 ease-in-out ${
+                            index === currentImageIndex
+                              ? "opacity-100"
+                              : "opacity-0 absolute inset-0"
+                          }`}
+                        >
+                          <img
+                            src={image}
+                            alt={`${role.title} Interface ${index + 1}`}
+                            className="h-full object-left object-cover"
+                            style={{ height: "100%", minHeight: "650px" }}
+                          />
+                        </div>
+                      ))}
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Features List */}
-                <div className="space-y-4">
-                  {role.features.map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"></div>
-                      <span className="text-gray-700">{feature}</span>
+                      {/* Invisible navigation areas */}
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-0 top-0 w-1/2 h-full bg-transparent hover:bg-gradient-to-r hover:from-black/5 hover:to-transparent transition-all duration-200 z-10"
+                        aria-label="Previous image"
+                      />
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-0 top-0 w-1/2 h-full bg-transparent hover:bg-gradient-to-l hover:from-black/5 hover:to-transparent transition-all duration-200 z-10"
+                        aria-label="Next image"
+                      />
                     </div>
-                  ))}
+
+                    {/* Removed dot indicators */}
+                  </div>
                 </div>
 
-                {/* Dashboard Image Carousel */}
-                <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-200 relative group">
-                  {roleImages[role.id as keyof typeof roleImages] && (
-                    <>
-                      <div className="relative h-[300px] md:h-[400px] overflow-hidden">
-                        {roleImages[role.id as keyof typeof roleImages].map((image, index) => (
-                          <div 
-                            key={index}
-                            className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
-                          >
-                            <img 
-                              src={image.src} 
-                              alt={image.alt} 
-                              className="w-full h-full object-contain"
-                            />
-                          </div>
-                        ))}
+                {/* Content Section */}
+                <div className="p-8 lg:p-12 flex flex-col justify-center bg-gray-50 lg:col-span-2">
+                  <div className="mb-8">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
+                        <role.icon className="h-6 w-6 text-white" />
                       </div>
-                      
-                      {/* Carousel Navigation */}
-                      <div className="absolute inset-0 flex items-center justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
-                          onClick={prevSlide}
-                          className="bg-white/80 hover:bg-white p-2 rounded-full shadow-lg text-gray-800 focus:outline-none"
-                          aria-label="Previous slide"
+                      <h3 className="text-3xl font-bold text-gray-900">
+                        {role.title}
+                      </h3>
+                    </div>
+                    <p className="text-xl text-gray-600 leading-relaxed mb-8">
+                      {role.description}
+                    </p>
+                  </div>
+
+                  {/* Key Capabilities */}
+                  <div className="mb-8">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-6">
+                      Key Capabilities:
+                    </h4>
+                    <div className="space-y-4">
+                      {role.features.map((feature, index) => (
+                        <div
+                          key={index}
+                          className="flex items-start space-x-3 group"
                         >
-                          <ChevronLeft className="h-6 w-6" />
-                        </button>
-                        <button 
-                          onClick={nextSlide}
-                          className="bg-white/80 hover:bg-white p-2 rounded-full shadow-lg text-gray-800 focus:outline-none"
-                          aria-label="Next slide"
-                        >
-                          <ChevronRight className="h-6 w-6" />
-                        </button>
-                      </div>
-                      
-                      {/* Dots Indicator */}
-                      <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-                        {roleImages[role.id as keyof typeof roleImages].map((_, index) => (
-                          <button
-                            key={index}
-                            onClick={() => setCurrentSlide(index)}
-                            className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'bg-blue-600 w-4' : 'bg-gray-400'}`}
-                            aria-label={`Go to slide ${index + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </>
-                  )}
+                          <div className="w-2 h-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mt-2 flex-shrink-0 group-hover:scale-125 transition-transform duration-200"></div>
+                          <span className="text-gray-700 leading-relaxed group-hover:text-gray-900 transition-colors duration-200">
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  {/* <div>
+                    <button className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                      Explore {role.title}
+                      <svg
+                        className="ml-2 h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+                  </div> */}
                 </div>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Bottom Stats */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Stat Card 1 */}
+          <motion.div 
+            className="text-center p-6 bg-white/80 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <motion.div 
+              className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
+              initial={{ scale: 0.8 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+            >
+              50+
+            </motion.div>
+            <motion.div 
+              className="text-gray-600"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.4 }}
+            >
+              Reliable
+            </motion.div>
+          </motion.div>
+          
+          {/* Stat Card 2 */}
+          <motion.div 
+            className="text-center p-6 bg-white/80 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <motion.div 
+              className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
+              initial={{ scale: 0.8 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.4 }}
+            >
+              99.9%
+            </motion.div>
+            <motion.div 
+              className="text-gray-600"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              Scalable
+            </motion.div>
+          </motion.div>
+          
+          {/* Stat Card 3 */}
+          <motion.div 
+            className="text-center p-6 bg-white/80 rounded-2xl border border-gray-200 hover:shadow-lg transition-all duration-300"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <motion.div 
+              className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
+              initial={{ scale: 0.8 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              24/7
+            </motion.div>
+            <motion.div 
+              className="text-gray-600"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.6 }}
+            >
+              Supported
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>
