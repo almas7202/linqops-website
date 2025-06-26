@@ -9,6 +9,7 @@ import Pricing from '@/components/Pricing';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
 import ScheduleDemo from '@/components/ScheduleDemo';
+import FAQ from '@/components/FAQ';
 
 const Index = () => {
   const location = useLocation();
@@ -55,7 +56,9 @@ const Index = () => {
       <div id="reviews">
         <Testimonials />
       </div>
-      <ScheduleDemo />
+      <div id="faqs">
+        <FAQ />
+      </div>
       <Footer />
     </div>
   );

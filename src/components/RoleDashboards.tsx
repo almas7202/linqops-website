@@ -15,8 +15,9 @@ const RoleDashboards = () => {
         "Essential features tailored for drivers to manage daily delivery operations.",
       images: [
         "/images/driver-dashboard.png",
-        "/images/driver-inspection.png",
         "/images/driver-pre&post-inpsection-page.png",
+        "/images/driver-inspection-scanner.png",
+        "/images/image (6).png"
       ],
       features: [
         "Daily check-in and inspection (pre/post-trip)",
@@ -32,10 +33,9 @@ const RoleDashboards = () => {
       description:
         "Manage onboarding, termination, and role-based access control for all users.",
       images: [
-        "/images/employee-page.png",
-        "/images/applicants.png",
-        "/images/employee-details.png",
-        "/images/termination.png",
+        "/images/employee-details-1.png",
+        "/images/employee-notes-1.png",
+        "/images/employee-details-list.png",
       ],
       features: [
         "Applicant onboarding and employee management",
@@ -51,9 +51,9 @@ const RoleDashboards = () => {
       description:
         "High-level oversight of the entire organization, warehouses, and system access.",
       images: [
-        "/images/organization.png",
-        "/images/owner-inspection.png",
-        "/images/vehicle-fleet-mnagment.png",
+        "/images/owner-inspection-1.png",
+        "/images/owner-vehicals-view.png",
+        "/images/Vehivals-details.png",
       ],
       features: [
         "Multi-warehouse visibility and reports",
@@ -142,24 +142,25 @@ const RoleDashboards = () => {
                 {/* Image Section */}
                 <div className="relative bg-white lg:col-span-3">
                   <div className="relative w-full h-full">
-                    <div className="relative overflow-hidden rounded-l-3xl bg-gray-50 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:translate-y-1 h-full">
-                      {role.images.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`transition-opacity duration-1000 ease-in-out ${
-                            index === currentImageIndex
-                              ? "opacity-100"
-                              : "opacity-0 absolute inset-0"
-                          }`}
-                        >
-                          <img
-                            src={image}
-                            alt={`${role.title} Interface ${index + 1}`}
-                            className="h-full object-left object-cover"
-                            style={{ height: "100%", minHeight: "650px" }}
-                          />
-                        </div>
-                      ))}
+                    <div className="relative overflow-hidden rounded-l-3xl bg-gray-50 shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:translate-y-1 h-full flex items-center justify-center">
+                      <div className="relative w-full" style={{ height: "650px" }}>
+                        {role.images.map((image, index) => (
+                          <div
+                            key={index}
+                            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                              index === currentImageIndex
+                                ? "opacity-100"
+                                : "opacity-0"
+                            }`}
+                          >
+                            <img
+                              src={image}
+                              alt={`${role.title} Interface ${index + 1}`}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                        ))}
+                      </div>
 
                       {/* Invisible navigation areas */}
                       <button

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   const [animatedCount, setAnimatedCount] = useState(0);
@@ -57,10 +58,12 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
+            <Link to="/contact">
             <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
               Start Trial
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
+            </Link>
           </div>
 
           {/* Trust Indicators */}
